@@ -14,7 +14,16 @@
 # limitations under the License.
 
 from __future__ import print_function
-import fcntl
+try:
+  import fcntl
+# On Windows this module is not available, just make those
+# methods no-ops
+except ImportError:
+  class fcntl:
+    @staticmethod
+    def fcntl(a, b, c=None):
+      pass
+
 import re
 import os
 import select

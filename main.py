@@ -30,6 +30,7 @@ else:
   import urllib2
   urllib = imp.new_module('urllib')
   urllib.request = urllib2
+from ntfsutils import hardlink, junction
 
 from trace import SetTrace
 from git_command import git, GitCommand
@@ -53,6 +54,23 @@ if not is_python3():
   # pylint:disable=W0622
   input = raw_input
   # pylint:enable=W0622
+
+
+if sys.platform == 'win32':
+  def symlink(source, link_name):
+    # Repo tries to create relative links. As we are falling back
+    # to hardlinks and junctions, the name is transformed back to
+    # an absolute path
+    source = os.path.normpath(os.path.join(os.path.dirname(link_name), source))
+    # Don't create links to sources that don't exist
+    if os.path.exists(source):
+      if os.path.isdir(source):
+        junction.create(source, link_name)
+      else:
+        hardlink.create(source, link_name)
+
+  os.symlink = symlink
+
 
 global_options = optparse.OptionParser(
                  usage="repo [-p|--paginate|--no-pager] COMMAND [ARGS]"
