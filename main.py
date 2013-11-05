@@ -80,7 +80,7 @@ global_options.add_option('-p', '--paginate',
                           help='display command output in the pager')
 global_options.add_option('--no-pager',
                           dest='no_pager', action='store_true',
-                          help='disable the pager')
+                          help='disable the pager', default=True)
 global_options.add_option('--trace',
                           dest='trace', action='store_true',
                           help='trace git command execution')
