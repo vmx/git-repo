@@ -23,8 +23,10 @@ called myproject:
     python.exe .repo\repo\repo init --no-repo-verify [...whatever arguments you need]
     python.exe .repo\repo\repo sync
 
-In case you want to be able to just type`repo`, just add `.repo\repo`
-to your `PATH`:
+In case you want to be able to just type`repo`, just copy the main repo files
+(`repo` and `repo.cmd`) into a directory that is in your `PATH`:
 
-    cd myproject
-    set "path=%PATH%;%CD%\.repo\repo"
+    mkdir repo
+    cd repo
+    set "path=%PATH%;%CD%"
+    copy myproject\.repo\repo\repo* .
