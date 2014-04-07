@@ -20,6 +20,7 @@ import imp
 import netrc
 import optparse
 import os
+import stat
 import sys
 import time
 
@@ -69,8 +70,13 @@ if sys.platform == 'win32':
       else:
         hardlink.create(source, link_name)
 
-  os.symlink = symlink
+  def remove(path):
+    # Read-only files are not removed on Windows
+    os.chmod(path, stat.S_IWRITE)
+    os.remove(path)
 
+  os.symlink = symlink
+  os.remove = remove
 
 global_options = optparse.OptionParser(
                  usage="repo [-p|--paginate|--no-pager] COMMAND [ARGS]"
